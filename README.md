@@ -25,7 +25,6 @@ Welcome to my professional portfolio showcasing selected research and coursework
 A reliable tool for assessing psychological dimensions of digital communication in research & applied settings.
 
 
-➡️ View project files
-
+➡️ View project files [🔗 View Project](./issertation_DECS)
 
 ### 2. Modelling 
