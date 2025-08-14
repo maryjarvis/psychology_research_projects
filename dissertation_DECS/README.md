@@ -17,7 +17,7 @@ Using Exploratory Factor Analysis (EFA) in **R**, the study identifies a reliabl
 
 ## 🔍 Abstract
 
-With social media use increasingly prevalent, especially among young adults, there is a lack of measures exploring the impact of confidence and self-esteem, social anxiety, and perceived social support within online interactions. This study introduces a new 36-item scale, developed based on prior research, to measure Digital Engagement Communication.
+With social media use increasingly prevalent, especially among young adults, there is a lack of measures exploring the impact of confidence and self-esteem, social anxiety, and perceived social support within online interactions. This study introduces a new 25-item scale, developed based on prior research, to measure Digital Engagement Communication.
 
 An exploratory factor analysis (EFA) was conducted to examine the structure of the newly developed scale, using a sample of 87 participants aged 18 to 56. The EFA revealed a three-factor solution, demonstrating good internal consistency and reliability. The findings were validated by the Internet Self-efficacy Scale (Kim & Glassman, 2013) to underscore its relevance for understanding the factors influencing digital engagement.
 
