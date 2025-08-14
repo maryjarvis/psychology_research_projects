@@ -12,7 +12,7 @@ Welcome to my professional portfolio showcasing selected research and coursework
 
 #### Key Points:
 - Identified three factors: Perceived Social Support, Social Anxiety in Digital Settings, Online Confidence & Engagement
-- Strong reliability (Cronbach’s Alpha: 0.84–0.87,)
+- Strong reliability (Cronbach’s Alpha: 0.84–0.87)
 - Validated against the Internet Self-efficacy Scale (ISS; Kim & Glassman, 2013)
 
 #### Technical Skills:
