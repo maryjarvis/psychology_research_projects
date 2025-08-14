@@ -27,4 +27,6 @@ A reliable tool for assessing psychological dimensions of digital communication 
 
 [➡️ View project files](./dissertation_DECS)
 
-### 2. Modelling 
+### 2. Psychometric Analysis Report 
+
+### 3. Experimental Analysis Report
