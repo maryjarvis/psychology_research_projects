@@ -7,20 +7,23 @@ Welcome to my professional portfolio showcasing selected research and coursework
 ## Projects 
 
 ### 1. Final Year Undergraduate Research Project 
+#### 📊 Digital Engagement Communication Scale (DECS)  
+**Goal:** Develop & validate a 36-item scale measuring online confidence, self-esteem, social anxiety, and perceived social support.  
 
-**Description:** Developed and validated a 36-item scale to measure psychological dimensions of digital interactions, including confidence, social anxiety, and perceived social support, using Exploratory Factor Analysis (EFA) in R.
+**Approach:**  
+- Exploratory Factor Analysis (EFA) in R (n = 87)  
+- Parallel analysis → 3-factor structure  
+- Items refined based on KMO, Bartlett’s test, and loading thresholds  
 
-#### Key Points:
-- Identified three factors: Perceived Social Support, Social Anxiety in Digital Settings, Online Confidence & Engagement
-- Strong reliability (Cronbach’s Alpha: 0.84–0.87)
-- Validated against the Internet Self-efficacy Scale (ISS; Kim & Glassman, 2013)
+**Key Findings:**  
+- **Factors:** Perceived Social Support, Social Anxiety, Confidence & Engagement  
+- **Reliability:** α = .84–.87  
+- **Model Fit:** RMSEA = .06, RMSR = .06  
+- **Validation:** Moderate correlations with Internet Self-efficacy Scale  
 
-#### Technical Skills:
-- **Programming:** R, tidyverse, psych, GPArotation, lavaan, MVN, car, lmtest
-- **Statistical Methods:** EFA with oblimin rotation, KMO, Bartlett’s test, Cronbach’s Alpha
-- **Visualization:** ggplot2
+**Impact:**  
+A reliable tool for assessing psychological dimensions of digital communication in research & applied settings.
 
-Data: CSV inputs
 
 ➡️ View project files
 
