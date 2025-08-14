@@ -43,27 +43,46 @@ The study provides valuable insights for assessing how confidence and self-estee
 
 ---
 
-## 📊 Key Results
+## 📊 Key Results  
 
-- **Three Factors Identified:**
-  1. Perceived Social Support  
-  2. Social Anxiety in Digital Settings  
-  3. Online Confidence & Engagement  
+**Three Factors Identified:**  
+1. **Perceived Social Support**  
+2. **Social Anxiety in Digital Settings**  
+3. **Online Confidence & Engagement**  
 
-- **Good internal consistency** across all three factors  
-- **Validated** against the Internet Self-efficacy Scale (Kim & Glassman, 2013)
+**Model Fit:**  
+| Fit Index | Value | Interpretation |
+|-----------|-------|----------------|
+| RMSEA | .06 (90% CI [.037, .075]) | Acceptable |
+| RMSR | .06 | Acceptable |
+| TLI | .87 | Below ideal, potential improvement |
+
+**Reliability (Cronbach’s α):**  
+- Factor 1: **.87**  
+- Factor 2: **.87**  
+- Factor 3: **.84**
 
 ---
 
-## 🧪 Method Summary
+## 🧪 Method Summary  
+- EFA with **minimum residual estimation** & **direct oblimin rotation**  
+- KMO = .78, Bartlett’s χ²(325) = 1055.10, *p* < .001  
+- 10 items removed for low KMO, cross-loading, or loadings < .30  
+- Final model: **25 items across 3 factors**  
+- Reliability analysis: Cronbach’s Alpha  
+- Construct validity: correlations with ISS  
+  - F1 (Perceived Social Support): r = .58  
+  - F3 (Confidence & Engagement): r = .56  
+  - F2 (Social Anxiety): r = .40  
 
-- Exploratory Factor Analysis (EFA) with oblimin rotation  
-- KMO and Bartlett’s test used to confirm sampling adequacy and factorability  
-- Items were removed iteratively based on cross-loading or loading below .30  
-- Final model included 25 items across 3 factors  
-- Reliability analysis conducted via Cronbach’s Alpha  
-- Construct validity tested using correlations with ISS
+---
 
+📈 Factor Correlations  
+|        | F1 | F2   | F3   |
+|--------|----|------|------|
+| **F1** | —  | -0.18 | 0.33 |
+| **F2** |    | —    | 0.08 |
+| **F3** |    |      | —    |
 ---
 
 ## 📜 Citation
