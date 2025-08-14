@@ -1,0 +1,299 @@
+# =========================================================
+# title: "Project Analysis"
+# date last changed: 14/03/25
+# R.version: 4.3.2
+
+# This script explores and analyses the DECS through exploratory factor analyses.
+# =========================================================
+
+
+# =========================================================
+#   -- LOAD LIBRARIES --
+# =========================================================
+library(tidyverse) 
+library(psych) 
+library(GPArotation)
+library(MVN)
+library(car)
+library(lmtest)
+library(lavaan)
+
+# Install data 
+df <- read_csv("Desktop/Project/N1001248_Project_Lab/project_data copy.csv")
+
+#  Change column names
+colnames(df) <- c("Age", "Gender_Male", "Gender_Female", "Gender_NonBinary", 
+                  "Gender_Other", 
+                  paste0("Item_", 1:(ncol(df) - 5))) # label items
+
+# =========================================================
+# -- CALCULATE DEMOGRAPHICS --
+# =========================================================
+# Calculate Gender Distribution
+gender <- sapply(df[, c("Gender_Male", "Gender_Female", "Gender_NonBinary", "Gender_Other")], function(x) sum(!is.na(x)))
+
+# Calculate Mean and SD of age, and range
+mean_age <- mean(df$Age, na.rm = TRUE)
+sd_age <- sd(df$Age, na.rm = TRUE)
+min_age <- min(df$Age, na.rm = TRUE)
+max_age <- max(df$Age, na.rm = TRUE)
+
+# =========================================================
+# -- DATA SUBSETTING AND RECODING --
+# =========================================================
+
+# Remove validation scale 
+df_sub <- df[, 1:(ncol(df) - 17)]
+
+# Select variables 
+df <- select(df_sub, -Age, -Gender_Male, -Gender_Female, -Gender_NonBinary,
+             -Gender_Other)
+
+# Recode negative items
+# List of items to reverse code
+reverse_items <- c("Item_6", "Item_8", "Item_9", "Item_10", "Item_11", "Item_12", 
+                   "Item_13", "Item_14", "Item_15", "Item_16", "Item_17", "Item_18", 
+                   "Item_19", "Item_20", "Item_21", "Item_22", "Item_23", "Item_24")
+
+# Reverse code the selected items
+df[reverse_items] <- lapply(df[reverse_items], function(x) 6 - x)
+
+# =========================================================
+# -- CONDUCT FIRST EFA -- 
+# =========================================================
+# Check assumptions and violations 
+# Correlations between items
+cor_df<- cor(df, use = "complete.obs")
+
+# Bartlett's Test
+cortest.bartlett(cor_df, n = nrow(df))
+
+# Kaiser-Meyer-Olkin's measure
+KMO(df) 
+
+# Parallel test
+fa_results <- fa.parallel(df, fa = "fa", main = "Parallel Analysis")
+
+# Run VSS test
+VSS(df)
+
+# Running factor analysis
+output1 <- fa(df, nfactors = 3, rotate = "oblimin", fm = "minres") 
+output1$loading # Request loadings from output
+
+# =========================================================
+# -- CONDUCT SECOND EFA -- 
+# =========================================================
+
+
+# Remove items due to cross-loading  and below the criterion of .30
+df2 <- df %>% select(-Item_18, -Item_19, -Item_22, -Item_23, -Item_28)
+
+# Remove rows with any missing values
+df2_complete <- na.omit(df2)
+
+# correlation matrix 
+cor_df_complete <- cor(df2_complete)
+
+# Bartlett's Test
+cortest.bartlett(cor_df_complete, n = nrow(df2))
+
+# Kaiser-Meyer-Olkin's measure
+KMO(df2)
+
+# Parallel test
+parallel_test2 <- fa.parallel(df2, fa = "fa", main = "Parallel Analysis")
+
+# Run Parallel Analysis 
+fa_results <- fa.parallel(df2, fa = "fa", plot = FALSE)
+
+# Run VSS test 
+vss_test <- VSS(df2)
+
+# Factor analysis
+output2 <- fa(df2, nfactors = 3, rotate = "oblimin", fm = "minres") 
+output2$loading # Request loadings from output
+
+# =========================================================
+# -- CONDUCT THIRD EFA -- 
+# =========================================================
+# Remove items due to cross-loading and/or below the criterion of .30
+df3 <- df2 %>% select(-Item_14)
+
+# Remove rows with any missing values
+df3_complete <- na.omit(df3)
+
+# Compute the correlation matrix for the complete cases
+cor_df_complete2 <- cor(df3_complete)
+
+# Bartlett's Test
+cortest.bartlett(cor_df_complete, n = nrow(df3))
+
+# Kaiser-Meyer-Olkin's measure- sampling adequacy
+KMO(df3)
+
+#VSS 
+vss_test <- VSS(df3)
+
+# Parallel test
+parallel_test2 <- fa.parallel(df3, fa = "fa", main = "Parallel Analysis")
+
+#EFA
+output3 <- fa(df3, nfactors = 3, rotate = "oblimin", fm = "minres") 
+output3$loading # Request loadings from output
+
+# =========================================================
+# -- CONDUCT FINAL EFA -- 
+# =========================================================
+# Remove items due to cross-loading and below the criterion of .30
+df4 <- df3 %>% select(-Item_7, -Item_20, -Item_32, -Item_30)
+
+# Descriptives of items
+psych::describe(df4) 
+
+# Remove rows with any missing values
+df4_complete <- na.omit(df4)
+
+# Compute the correlation matrix for the complete cases
+cor_df_complete4 <- cor(df4_complete)
+
+# Bartlett's Test
+cortest.bartlett(cor_df_complete4, n = nrow(df4))
+
+# Kaiser-Meyer-Olkin's measure- sampling adequacy
+KMO(df4)
+
+#VSS 
+vss_test <- VSS(df4)
+
+# Parallel test
+parallel_test4 <- fa.parallel(df4, fa = "fa", main = "Parallel Analysis")
+
+#EFA
+output4 <- fa(df4, nfactors = 3, rotate = "oblimin", fm = "minres") 
+output4$loading # Request loadings from output
+
+# =========================================================
+# -- FACTOR ANALYSIS VISUALISATION -- 
+# =========================================================
+# Perform parallel factor analysis
+fa_results <- fa.parallel(df4, fa = "fa", plot = FALSE)
+
+# Create a data frame for eigenvalues from both factor and parallel analysis
+eigenvalues_df <- data.frame(
+  Factor = 1:length(fa_results$fa.values),  # Factor numbers
+  Factor_Analysis = fa_results$fa.values,   # Factor analysis eigenvalues
+  Parallel_Analysis = fa_results$fa.sim     # Parallel analysis simulated eigenvalues
+)
+
+# Reshape data for easier plotting
+eigenvalues_long <- pivot_longer(eigenvalues_df, 
+                                 cols = c(Factor_Analysis, Parallel_Analysis), 
+                                 names_to = "Analysis_Type", 
+                                 values_to = "Eigenvalue")
+
+# Plot eigenvalues from both analyses
+ggplot(eigenvalues_long, aes(x = Factor, y = Eigenvalue, color = Analysis_Type, linetype = Analysis_Type)) +
+  geom_line(size = 1) +
+  geom_point(data = subset(eigenvalues_long, Analysis_Type == "Factor_Analysis"), 
+             aes(x = Factor, y = Eigenvalue), color = "black", size = 3) +
+  labs(x = "Factor", y = "Eigenvalues", color = "Analysis Type", linetype = "Analysis Type") +
+  scale_color_manual(values = c("black", "black")) +  
+  scale_linetype_manual(values = c("solid", "dashed")) +
+  theme_minimal()
+
+# =========================================================
+# -- DESCRIPTIVES STATISTICS  -- 
+# =========================================================
+# Calculate factor scores by averaging relevant items for each factor
+df4 <- df4 %>%
+  mutate(
+    factor1 = rowMeans(select(., Item_25, Item_26, Item_27, Item_29, Item_31, Item_33, Item_34, Item_35, Item_36), na.rm = TRUE),
+    factor2 = rowMeans(select(., Item_6, Item_8, Item_9, Item_10, Item_11, Item_12, Item_15, Item_16, Item_17, Item_21, Item_24), na.rm = TRUE),
+    factor3 = rowMeans(select(., Item_1, Item_2, Item_3, Item_4, Item_5, Item_13), na.rm = TRUE)
+  )
+
+# Calculate Mean and SD of each factor
+factor1_mean <- mean(df4$factor1, na.rm = TRUE)
+factor1_sd <- sd(df4$factor1, na.rm = TRUE)
+
+factor2_mean <- mean(df4$factor2, na.rm = TRUE)
+factor2_sd <- sd(df4$factor2, na.rm = TRUE)
+
+factor3_mean <- mean(df4$factor3, na.rm = TRUE)
+factor3_sd <- sd(df4$factor3, na.rm = TRUE)
+
+# Create histograms and density plots for each factor
+
+# Factor 1 Distribution
+ggplot(df4) +
+  geom_histogram(aes(x = factor1, y = ..density..), bins = 10, fill = "skyblue", color = "black", alpha = 0.7) +
+  geom_density(aes(x = factor1), color = "black", size = 1) +
+  labs(x = "Total Score for Factor 1", y = "Density") +
+  theme_minimal() +
+  theme(panel.grid = element_blank())
+
+# Factor 2 Distribution
+ggplot(df4) +
+  geom_histogram(aes(x = factor2, y = ..density..), bins = 10, fill = "skyblue", color = "black", alpha = 0.7) +
+  geom_density(aes(x = factor2), color = "black", size = 1) +
+  labs(x = "Total Score for Factor 2", y = "Density") +
+  theme_minimal() +
+  theme(panel.grid = element_blank())
+
+# Factor 3 Distribution
+ggplot(df4) +
+  geom_histogram(aes(x = factor3, y = ..density..), bins = 10, fill = "skyblue", color = "black", alpha = 0.7) +
+  geom_density(aes(x = factor3), color = "black", size = 1) +
+  labs(x = "Total Score for Factor 3", y = "Density") +
+  theme_minimal() +
+  theme(panel.grid = element_blank())
+
+# =========================================================
+# -- PREDICTIVE VALIDITY--  
+# =========================================================
+# Load the dataset containing the ISS (Internet Self-efficacy Scale) items
+cor_df <- read.csv("~/Desktop/Project/project_data.csv")
+
+# Extract columns corresponding to the ISS items (from column 37 to 53)
+ISS <- cor_df[, 37:53]
+
+# Rename the ISS columns for clarity, giving them consistent names like "Item1", "Item2", etc.
+colnames(ISS) <- paste0("Item", 1:ncol(ISS))
+
+# Combine the ISS items with the existing data frame (df4) that contains the factor scores
+df_validity <- cbind(df4, ISS)
+
+# Create a new column for the total ISS score by summing up all the ISS item scores for each individual
+df_validity <- df_validity %>%
+  mutate(ISS_Total_Score = rowSums(select(., starts_with("Item")), na.rm = TRUE))
+
+# Calculate the correlation between Factor 1 and the total ISS score, using pairwise complete observations to handle missing data
+construct_validity1 <- cor(df_validity$factor1, df_validity$ISS_Total_Score, use = "pairwise.complete.obs")
+
+# Calculate the correlation between Factor 2 and the total ISS score
+construct_validity2 <- cor(df_validity$factor2, df_validity$ISS_Total_Score, use = "pairwise.complete.obs")
+
+# Calculate the correlation between Factor 3 and the total ISS score
+construct_validity3 <- cor(df_validity$factor3, df_validity$ISS_Total_Score, use = "pairwise.complete.obs")
+# =========================================================
+# -- CALCULATING RELIABILITY OF ISS IN SAMPLE-- 
+# =========================================================
+# Reliability of ISS in sample
+# Calculate the total ISS score by summing the relevant items
+df_validity$ISS_Total_Score <- rowSums(df_validity[, c("Item1", "Item2", "Item3", 
+                                                       "Item4", "Item5", "Item6", 
+                                                       "Item7", "Item8", "Item9", 
+                                                       "Item10", "Item11", "Item12", 
+                                                       "Item13", "Item14", "Item15", 
+                                                       "Item16", "Item17")], na.rm = TRUE)
+
+# Calculate Cronbach's alpha for the total ISS score
+alpha_result <- alpha(df_validity[, c("ISS_Total_Score", "Item1", "Item2", "Item3", 
+                                      "Item4", "Item5", "Item6", "Item7", 
+                                      "Item8", "Item9", "Item10", "Item11", 
+                                      "Item12", "Item13", "Item14", "Item15", 
+                                      "Item16", "Item17")])
+
+# Extract the Cronbach's alpha value
+alpha_value <- alpha_result$total$raw_alpha
