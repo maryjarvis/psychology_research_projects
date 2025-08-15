@@ -30,25 +30,24 @@ A reliable tool for assessing psychological dimensions of digital communication 
 ### 2. Psychometric Analysis Report 
 #### 🎓 Enterprise Grad Scheme: Education Engagement & Retention
 
-## Goal
-Investigate whether **academic self-efficacy, goal orientation, and perceived teacher support** predict education engagement, as part of a report for **Enterprise Rent-A-Car’s graduate retention program**.  
+**Goal:** Investigate whether **academic self-efficacy, goal orientation, and perceived teacher support** predict education engagement, as part of a report for **Enterprise Rent-A-Car’s graduate retention program**.  
 
-## Approach
+**Approach:**  
 - **Participants:** 41 university students (27 female, 13 male, 1 non-binary)  
 - **Method:** Online survey using validated scales (NGSE, GOS, CSSS, SES)  
 - **Analysis:** Multiple regression to examine predictors of education engagement  
 
-## Key Findings
+**Key Findings:**  
 - **Significant predictors:** Academic self-efficacy (β = .60) and perceived teacher support (β = .33)  
 - **Non-significant predictor:** Goal orientation (β = -.06)  
 - **Model fit:** F(3,35) = 12.91, p < .01, explaining 52.5% of variance in engagement  
 - **Reliability:** Cronbach’s α = .69–.87  
 - **Correlations:** Self-efficacy r = .65***, Teacher support r = .41**  
 
-## Impact
+**Impact:**  
 Highlights factors that **positively influence engagement**, offering insights for improving **graduate retention strategies** and supporting student success.
 
-[➡️ View project file](./PerceptualLoadMusicTempo)
+[➡️ View project file](./enterprise_grad_scheme_retention)
 
 ### 3. Experimental Analysis Report
 #### 🎧 Perceptual Load & Music Tempo: Impact on Reaction Times  
