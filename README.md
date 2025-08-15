@@ -31,7 +31,7 @@ A reliable tool for assessing psychological dimensions of digital communication 
 
 
 ### 3. Experimental Analysis Report
-####  Perceptual Load & Music Tempo: Impact on Reaction Times  
+#### 🎧 Perceptual Load & Music Tempo: Impact on Reaction Times  
 **Goal:** Examine how perceptual load and background music tempo influence reaction times in a visual search task.  
 
 **Method:**  
