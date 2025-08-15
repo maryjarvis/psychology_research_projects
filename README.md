@@ -25,7 +25,7 @@ Welcome to my professional portfolio showcasing selected research and coursework
 A reliable tool for assessing psychological dimensions of digital communication in research & applied settings.
 
 
-[➡️ View project files](./dissertation_DECS)
+[➡️ View project file](./dissertation_DECS)
 
 ### 2. Psychometric Analysis Report 
 
@@ -50,4 +50,4 @@ A reliable tool for assessing psychological dimensions of digital communication 
 **Impact:**  
 Higher perceptual load reduces processing speed regardless of music tempo. Insights may help inform workload optimisation in applied settings.  
 
-[🔗 View Project](./PerceptualLoadMusicTempo)
+[➡️ View project file](./PerceptualLoadMusicTempo)
