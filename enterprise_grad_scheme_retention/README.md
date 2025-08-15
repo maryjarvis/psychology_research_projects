@@ -106,4 +106,4 @@ Scales were administered via an online questionnaire:
 ## 📜 Citation
 If referencing this project, please cite as:  
 
-> Jarvis, M. (2025). Predicting Educational Engagement: Self-Efficacy, Goal Orientation & Teacher Support. GitHub. https://github.com/maryjarvis/psychology_research_projects/
+> Jarvis, M. (2025). Predicting Educational Engagement: Self-Efficacy, Goal Orientation & Teacher Support. GitHub. https://github.com/maryjarvis/psychology_research_projects/enterprise_grad_scheme_retention/
