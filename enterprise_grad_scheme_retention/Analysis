@@ -1,0 +1,111 @@
+# ---------------------------- #
+# Load Packages
+# ---------------------------- #
+install.packages(c('tidyverse', 'psyntur', 'car', 'lm.beta'))
+
+library(tidyverse)
+library(psyntur)
+library(car)
+library(lm.beta)
+
+# Check psyntur version
+packageVersion("psyntur")
+
+# ---------------------------- #
+# Load Data
+# ---------------------------- #
+psymetr_df <- read_csv("clean_data.csv")
+
+# ---------------------------- #
+# Recode Negative Items
+# ---------------------------- #
+# teach items: values 1-3, negatively keyed: 4 and 6
+# education items: values 1-5, negatively keyed: 7-9
+
+psymetr_df_fix <- psymetr_df %>%
+  mutate(
+    # Recode negatively keyed education items
+    ed_7 = re_code(ed_7, 1:5, 5:1),
+    ed_8 = re_code(ed_8, 1:5, 5:1),
+    ed_9 = re_code(ed_9, 1:5, 5:1),
+    # Recode negatively keyed teacher items
+    teach_4 = re_code(teach_4, 1:3, 3:1),
+    teach_6 = re_code(teach_6, 1:3, 3:1)
+  )
+
+# ---------------------------- #
+# Cronbach's Alpha
+# ---------------------------- #
+cronbach(
+  psymetr_df_fix,
+  education = starts_with('ed_'),
+  goalorientation = starts_with('goal_'),
+  selfefficacy = starts_with('self_'),
+  teacher = starts_with('teach_')
+)
+
+# ---------------------------- #
+# Aggregate Total Scores
+# ---------------------------- #
+psymetr_df_total <- total_scores(
+  psymetr_df_fix,
+  education = starts_with('ed_'),
+  goalorientation = starts_with('goal_'),
+  selfefficacy = starts_with('self_'),
+  teacher = starts_with('teach_')
+)
+
+psymetr_df_total  # View aggregated scores
+
+# ---------------------------- #
+# Descriptive Statistics
+# ---------------------------- #
+describe_across(
+  psymetr_df_total,
+  variables = everything(),
+  functions = list(avg = mean_xna, stdev = sd_xna),
+  pivot = TRUE
+)
+
+# ---------------------------- #
+# Inter-Correlation Matrix & Scatterplot
+# ---------------------------- #
+cor(psymetr_df_total, use = 'complete.obs')
+
+scatterplot_matrix(
+  psymetr_df_total,
+  teacher,
+  goalorientation,
+  selfefficacy,
+  education
+)
+
+# ---------------------------- #
+# Regression Analysis
+# ---------------------------- #
+model <- lm(
+  education ~ teacher + selfefficacy + goalorientation,
+  data = psymetr_df_total
+)
+
+summary(model)
+
+# Confidence intervals and multicollinearity
+confint(model)
+vif(model)
+
+# Standardized coefficients
+model_standardized <- lm.beta(model)
+summary(model_standardized)
+
+# ---------------------------- #
+# Participant Demographics
+# ---------------------------- #
+Age <- read_csv("clean_data_age.csv")
+
+describe_across(
+  Age,
+  variables = everything(),
+  functions = list(avg = mean_xna, stdev = sd_xna),
+  pivot = TRUE
+)
