@@ -1,0 +1,136 @@
+# ==============================
+# Experimental Study: Reaction Time Analysis
+# ==============================
+
+# ---- Load Required Packages ----
+# Uncomment install.packages(...) lines if you don't already have the packages installed
+# install.packages("psyntur")
+# install.packages("tidyverse")
+# install.packages("afex")
+# install.packages("emmeans")
+# install.packages("janitor")
+
+library(psyntur)     # For experimental design and analysis functions
+library(tidyverse)   # For data wrangling and plotting
+library(afex)        # For ANOVA and mixed-design analysis
+library(emmeans)     # For estimated marginal means and post-hoc tests
+library(janitor)     # For cleaning variable names
+
+# ==============================
+# Demographic Data Processing
+# ==============================
+
+# Load demographic dataset (from psyntur's example data here)
+df_info <- demographics %>%
+  clean_names() # Make all variable names lowercase and snake_case
+
+# Select relevant columns, remove missing values, and rename 'id' column
+df_info <- df_info %>%
+  select(id, key, response) %>%
+  drop_na() %>%
+  rename(id = id)
+
+view(df_info) # View the cleaned demographic data
+
+# Keep only Age and Gender rows and remove duplicates
+df_info <- df_info %>%
+  filter(key %in% c("Age", "Gender")) %>%
+  unique()
+
+# Pivot Age and Gender into separate columns
+df_wide <- df_info %>%
+  pivot_wider(names_from = key, values_from = response)
+
+# Convert Age to numeric
+df_wide$Age <- as.numeric(df_wide$Age)
+
+# Remove any impossible age values (e.g., data entry errors)
+df_wide <- df_wide %>%
+  filter(Age != 3452)
+
+# Summarise demographic stats for Age
+describe_across(
+  data = df_wide,
+  variables = Age,
+  functions = list(
+    avg = mean,
+    stdev = sd,
+    min_age = min,
+    max_age = max,
+    med = median,
+    iqr = IQR
+  )
+)
+
+# Count number of participants by Gender
+df_wide %>%
+  count(Gender)
+
+# ==============================
+# Task Data Preparation
+# ==============================
+
+# Load task reaction time data
+rt <- read_excel("Downloads/rt_final.xlsx")
+
+# Clean column names
+df_clean <- rt %>%
+  clean_names()
+
+# Select only relevant columns
+df_clean_2 <- df_clean %>%
+  select(
+    participant_private_id,
+    response_type,
+    reaction_time,
+    correct,
+    perception,
+    tempo
+  ) %>%
+  drop_na() %>%
+  rename(id = participant_private_id)
+
+# Keep only correct responses
+task_data_correct <- df_clean_2 %>%
+  filter(correct == 1)
+
+# Keep only rows where a participant actually responded
+task_data_correct <- task_data_correct %>%
+  filter(response_type == "response")
+
+# Remove outliers with reaction time > 5000 ms
+df_clean_2 <- filter(task_data_correct, reaction_time <= 5000)
+
+# ==============================
+# Data Analysis
+# ==============================
+
+# Descriptive statistics by perception and tempo
+describe(
+  df_clean_2,
+  by = c(perception, tempo),
+  mean_RT = mean(reaction_time),
+  SD_RT = sd(reaction_time)
+)
+
+# Box plot of reaction time by perception and tempo
+tukeyboxplot(
+  y = reaction_time,
+  x = perception,
+  by = tempo,
+  data = df_clean_2,
+  jitter = TRUE
+)
+
+# ==============================
+# ANOVA Analysis
+# ==============================
+
+# Two-way repeated measures ANOVA
+modelfinal <- aov_car(
+  reaction_time ~ Error(id / perception * tempo),
+  data = df_clean_2
+)
+
+# Output ANOVA summary
+summary(modelfinal)
